@@ -77,12 +77,12 @@
             background: white;
             border-radius: 50%;
             box-shadow: 0 0 10px 2px white;
-            animation: shooting 2s linear forwards;
+            animation: shooting 13s linear forwards;
         }
 
         @keyframes shooting {
             0% { transform: translate(0, 0) scale(1); opacity: 1; }
-            100% { transform: translate(100px, 100vh) scale(0); opacity: 0; }
+            100% { transform: translate(500px, 100vh) scale(0); opacity: 0; }
         }
 
         button {
@@ -200,7 +200,7 @@
                 // Удаляем звёзду после анимации
                 setTimeout(() => {
                     shootingStar.remove();
-                }, 3000);
+                }, 10000);
             }, n); // Падающая звезда каждые 2 секунды
         }
 
@@ -233,8 +233,6 @@
         window.onload = () => {
             createStars();
             createShootingStars(2000);
-	    createShootingStars(500);
-	    createShootingStars(700);
 	    createShootingStars(1200);
         };
 
