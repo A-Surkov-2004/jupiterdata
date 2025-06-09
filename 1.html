@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Спокойной ночи 🌙</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #0a0e24, #1a1a3a, #2d1b4e);
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            position: relative;
+        }
+
+        .container {
+            text-align: center;
+            z-index: 10;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        p {
+            font-size: 1.5em;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+
+        .moon {
+            position: absolute;
+            top: 10%;
+            right: 15%;
+            width: 100px;
+            height: 100px;
+            background: #f5f3ce;
+            border-radius: 50%;
+            box-shadow: 0 0 30px #f5f3ce, 0 0 60px #f5f3ce88;
+            animation: glow 3s infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 30px #f5f3ce, 0 0 60px #f5f3ce88;
+            }
+            to {
+                box-shadow: 0 0 40px #f5f3ce, 0 0 80px #f5f3ceaa;
+            }
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .shooting-star {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px white;
+            animation: shooting 2s linear forwards;
+        }
+
+        @keyframes shooting {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(100px, 100vh) scale(0); opacity: 0; }
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.2em;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .music-control {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            z-index: 100;
+        }
+
+        /* Стиль для иконки звука */
+        .music-icon {
+            font-size: 24px;
+            margin-right: 5px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="moon"></div>
+    
+    <div class="container">
+        <h1 id="wishText">Спокойной ночи, <span id="name">Малявка</span></h1>
+        <p>Пусть подушка будет мягкой, а сны — тёплыми и безмятежными.</p>
+        <button id="wishButton">Тык!</button>
+    </div>
+
+    <!-- Кнопка управления музыкой -->
+    <div class="music-control">
+        <button id="musicButton">
+            <span class="music-icon">🔊</span> Включить музыку
+        </button>
+    </div>
+
+    <!-- Аудио (можно заменить ссылкой на свой трек) -->
+    <audio autoplay id="backgroundMusic" loop>
+        <source src="https://github.com/A-Surkov-2004/jupiterdata/raw/refs/heads/main/a.mp3" type="audio/mpeg">
+        Ваш браузер не поддерживает аудио.
+    </audio>
+
+    <script>
+        // Список пожеланий
+        const wishes = [
+
+	    "Спокойной ночи",
+            "Сладких снов",
+            "Отдыхай и набирайся сил",
+            "Пусть снятся добрые сны",
+            "Доброй ночи",
+            "Спи крепко"
+        ];
+        let currentWishIndex = 0;
+        const name = "Малявка"; // Можно заменить на любое имя
+
+        // Элементы для управления музыкой
+        const musicButton = document.getElementById('musicButton');
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        let isMusicPlaying = false;
+
+
+        // Создаём звёзды
+        function createStars() {
+            const starsCount = 100;
+            for (let i = 0; i < starsCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                const size = Math.random() * 3 + 1;
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight;
+                const duration = Math.random() * 3 + 2 + 's';
+                const delay = Math.random() * 2 + 's';
+                
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${x}px`;
+                star.style.top = `${y}px`;
+                star.style.setProperty('--duration', duration);
+                star.style.animationDelay = delay;
+                
+                document.body.appendChild(star);
+            }
+        }
+
+        // Создаём падающие звёзды с интервалом
+        function createShootingStars(n) {
+            setInterval(() => {
+                const shootingStar = document.createElement('div');
+                shootingStar.classList.add('shooting-star');
+                
+                const x = Math.random() * window.innerWidth;
+                const y = -10;
+                
+                shootingStar.style.left = `${x}px`;
+                shootingStar.style.top = `${y}px`;
+                
+                document.body.appendChild(shootingStar);
+                
+                // Удаляем звёзду после анимации
+                setTimeout(() => {
+                    shootingStar.remove();
+                }, 3000);
+            }, n); // Падающая звезда каждые 2 секунды
+        }
+
+        // Меняем пожелание при нажатии на кнопку
+        document.getElementById('wishButton').addEventListener('click', () => {
+            currentWishIndex = (currentWishIndex + 1) % wishes.length;
+            document.getElementById('wishText').innerHTML = 
+                `${wishes[currentWishIndex]}, <span id="name">${name}</span>`;
+            
+            // Добавляем эффект пульсации
+            const container = document.querySelector('.container');
+            container.style.animation = 'none';
+            void container.offsetWidth; // Перезапуск анимации
+            container.style.animation = 'pulse 0.5s';
+        });
+
+ 	// Управление музыкой
+        musicButton.addEventListener('click', () => {
+            if (isMusicPlaying) {
+                backgroundMusic.pause();
+                musicButton.innerHTML = '<span class="music-icon">🔊</span> Включить музыку';
+            } else {
+                backgroundMusic.play();
+                musicButton.innerHTML = '<span class="music-icon">🔇</span> Выключить музыку';
+            }
+            isMusicPlaying = !isMusicPlaying;
+        });
+
+        // Создаём звёзды и запускаем падающие звёзды при загрузке
+        window.onload = () => {
+            createStars();
+            createShootingStars(2000);
+	    createShootingStars(500);
+	    createShootingStars(700);
+	    createShootingStars(1200);
+        };
+
+        // Добавляем анимацию пульсации
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+                100% { transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
