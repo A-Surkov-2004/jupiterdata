@@ -10,6 +10,8 @@ services:
       - ./certs:/etc/nginx/certs:ro
       - ./vhost.d:/etc/nginx/vhost.d
       - ./html:/usr/share/nginx/html
+    labels:
+      - "com.github.nginx-proxy.nginx=true"
     networks:
       - proxy-network
     restart: always
@@ -26,6 +28,7 @@ services:
       - ./html:/usr/share/nginx/html
     environment:
       - DEFAULT_EMAIL=andrey.surk.2904@gmail.com
+      - NGINX_PROXY_CONTAINER=nginx-proxy
     networks:
       - proxy-network
     restart: always
